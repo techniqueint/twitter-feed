@@ -1,7 +1,5 @@
 <?php
-
- if ( !defined( 'ABSPATH' ) ) exit;
-
+if ( !defined( 'ABSPATH' ) ) exit;
 
 // Sanitize and validate input. Accepts an array, return a sanitized array.
 function ti_twitter_options_validate($input) {
@@ -179,4 +177,3 @@ function buildBaseString($baseURI, $method, $params) {
     }
   }
 ?>
-
