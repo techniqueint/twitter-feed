@@ -1,10 +1,11 @@
 <?php
-if ( !defined( 'ABSPATH' ) ) exit;
+
+ if ( !defined( 'ABSPATH' ) ) exit;
+
 
 // Sanitize and validate input. Accepts an array, return a sanitized array.
 function ti_twitter_options_validate($input) {
   
-  // Say our second option must be safe text with no HTML tags
   $input['access_token'] =  wp_filter_nohtml_kses($input['access_token']);
   $input['access_token_secret'] =  wp_filter_nohtml_kses($input['access_token_secret']);
   $input['consumer_key'] =  wp_filter_nohtml_kses($input['consumer_key']);
@@ -77,11 +78,16 @@ function buildBaseString($baseURI, $method, $params) {
       //$url = "http://api.twitter.com/1.1/statuses/user_timeline/{$username}.json?count=".$this->count."&trim_user=".$this->trim_user;
       $url = "https://api.twitter.com/1.1/statuses/user_timeline/{$username}.json";
      
+        $oauth_access_token = get_option('access_token');
+        $oauth_access_token_secret = get_option('access_token_secret');
+        $consumer_key = get_option('consumer_key'); 
+        $consumer_secret = get_option('consumer_secret');
+        
 
-        $oauth_access_token = "your access token"; 
-        $oauth_access_token_secret = "your access token secret"; 
-        $consumer_key = "your consumer key"; 
-        $consumer_secret = "your consumer secret key";
+        //$oauth_access_token = "9511752-uOQo3BSxeW7Ja3ffv1GHCKfBU4x5Su7UVwwiDCV3us"; 
+        //$oauth_access_token_secret = "RI82jeWTICBFHsRC9BYJ2GC32gr0xAPcNocYgC9WY"; 
+        //$consumer_key = "Oc6rLIBCGMqPsA9iCdCYaQ"; 
+        //$consumer_secret = "OYXqPdfHe2JzYmeRE9hVXbQ7uLhMkrSPypwE916Ag";
 
       $oauth = array( 'oauth_consumer_key' => $consumer_key,
                         'oauth_nonce' => time(),
@@ -158,7 +164,7 @@ function buildBaseString($baseURI, $method, $params) {
 
 
     public function data(){
-  if (strlen($this->user) < 1 ) $this->user="tweepsum";
+	if (strlen($this->user) < 1 ) $this->user="tweepsum";
 
       if($this->second() < $this->time){
 
