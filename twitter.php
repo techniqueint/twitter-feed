@@ -1,9 +1,65 @@
 <?php
 
- if ( !defined( 'ABSPATH' ) ) exit;
+if ( !defined( 'ABSPATH' ) ) exit;
+
+//require_once dirname( __FILE__ ) . '/twitter.php';
+
+// create custom plugin settings menu
+add_action('admin_menu', 'ti_twitter_menu');
+
+function ti_twitter_menu() {
+
+  //create new top-level menu
+   add_options_page('Twitter Settings', 'Twitter Settings', 'manage_options', 'plugin', 'ti_twitter_setting_page');
+  //call register settings function
+  add_action( 'admin_init', 'register_mysettings' );
+}
 
 
-// Sanitize and validate input. Accepts an array, return a sanitized array.
+function register_mysettings() {
+  //register our settings
+  register_setting( 'ti_twitter_vars', wp_filter_nohtml_kses('consumer_key') );
+  register_setting( 'ti_twitter_vars', wp_filter_nohtml_kses('consumer_secret') );
+  register_setting( 'ti_twitter_vars', wp_filter_nohtml_kses('access_token') );
+  register_setting( 'ti_twitter_vars', wp_filter_nohtml_kses('access_token_secret') );
+}
+
+function ti_twitter_setting_page() {
+?>
+<div class="wrap">
+<h2>Twitter settings</h2>
+<p>You will need to create an app in your twitter profile</p>
+
+<form method="post" action="options.php">
+    <?php settings_fields( 'ti_twitter_vars' ); ?>
+    <table class="form-table">
+        <tr valign="top">
+        <th scope="row">Consumer key</th>
+        <td><input type="text" name="consumer_key" value="<?php echo get_option('consumer_key'); ?>" size="80" /></td>
+        </tr>
+         
+        <tr valign="top">
+        <th scope="row">Consumer secret</th>
+        <td><input type="text" name="consumer_secret" value="<?php echo get_option('consumer_secret'); ?>" size="80" /></td>
+        </tr>
+        
+        <tr valign="top">
+        <th scope="row">Access token</th>
+        <td><input type="text" name="access_token" value="<?php echo get_option('access_token'); ?>" size="80" /></td>
+        </tr>
+         <tr valign="top">
+        <th scope="row">Access token secret</th>
+        <td><input type="text" name="access_token_secret" value="<?php echo get_option('access_token_secret'); ?>" size="80" /></td>
+        </tr>
+    </table>
+    
+    <?php submit_button(); ?>
+
+</form>
+</div>
+<?php } 
+
+ // Sanitize and validate input. Accepts an array, return a sanitized array.
 function ti_twitter_options_validate($input) {
   
   $input['access_token'] =  wp_filter_nohtml_kses($input['access_token']);
@@ -83,11 +139,6 @@ function buildBaseString($baseURI, $method, $params) {
         $consumer_key = get_option('consumer_key'); 
         $consumer_secret = get_option('consumer_secret');
         
-
-        //$oauth_access_token = "9511752-uOQo3BSxeW7Ja3ffv1GHCKfBU4x5Su7UVwwiDCV3us"; 
-        //$oauth_access_token_secret = "RI82jeWTICBFHsRC9BYJ2GC32gr0xAPcNocYgC9WY"; 
-        //$consumer_key = "Oc6rLIBCGMqPsA9iCdCYaQ"; 
-        //$consumer_secret = "OYXqPdfHe2JzYmeRE9hVXbQ7uLhMkrSPypwE916Ag";
 
       $oauth = array( 'oauth_consumer_key' => $consumer_key,
                         'oauth_nonce' => time(),
